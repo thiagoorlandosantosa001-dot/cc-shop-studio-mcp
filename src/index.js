@@ -231,6 +231,15 @@ export default {
     const url = new URL(request.url);
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
 
+    // Verificação de domínio da OpenAI Apps.
+    // O token deve corresponder exatamente ao exibido no painel da OpenAI.
+    if (url.pathname === "/.well-known/openai-apps-challenge") {
+      return new Response("o0bhtCnGa_EzEt76jvnfWYm5aouL7I8Z51-3LYAP_4E", {
+        status: 200,
+        headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" }
+      });
+    }
+
     if (url.pathname === "/mcp") {
       if (request.method === "GET" || request.method === "DELETE") return new Response("Method Not Allowed", { status: 405, headers: { allow: "POST", ...CORS } });
       if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405, headers: CORS });
